@@ -32,7 +32,7 @@ export default function Layout() {
 
     const navItems = [
         { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-        { name: 'Employees', path: '/employees', icon: Users },
+        { name: 'Employees', path: '/employees', icon: Users, roles: ['ROLE_ADMIN', 'ROLE_MANAGER']},
         { name: 'Payroll', path: '/payroll', icon: FileText },
         { name: 'Departments', path: '/departments', icon: Building2 },
         { name: 'Attendance', path: '/attendance', icon: Clock },
@@ -41,6 +41,9 @@ export default function Layout() {
         { name: 'Settings', path: '/settings', icon: Settings },
     ];
 
+    const filteredNavItems = navItems.filter(item =>
+        !item.roles || item.roles.includes(user?.role)
+    );
     return (
         <div className="flex h-screen bg-[#F8FAFC]">
             {/* Sidebar */}
@@ -71,7 +74,7 @@ export default function Layout() {
 
                 {/* Navigation Menu */}
                 <nav className="flex-1 p-4 space-y-1.5 overflow-y-auto">
-                    {navItems.map((item) => {
+                    {filteredNavItems.map((item) => {
                         const Icon = item.icon;
                         return (
                             <NavLink

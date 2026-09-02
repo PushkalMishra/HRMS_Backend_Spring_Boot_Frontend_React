@@ -3,7 +3,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import Layout from './components/Layout';
 import Login from './pages/Login';
 import Dashboard from './pages/dashboard/Dashboard';
-
+import Employees from './pages/employees/Employees';
 const ProtectedRoute = ({ children }) => {
     const { isAuthenticated } = useAuth();
     return isAuthenticated ? children : <Navigate to="/login" replace />;
@@ -26,7 +26,14 @@ export default function App() {
                         }
                     >
                         <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/employees" element={<div className="p-4">Employees Page (Phase 3)</div>} />
+                        {/* Restricted to Admin and Manager only */}
+                        <Route path="/employees"
+                            element={
+                                <ProtectedRoute allowedRoles={['ROLE_ADMIN', 'ROLE_MANAGER']}>
+                                    <Employees />
+                                </ProtectedRoute>
+                            }
+                        />
                         <Route path="/payroll" element={<div className="p-4">Payroll Page</div>} />
                         <Route path="/departments" element={<div className="p-4">Departments Page</div>} />
                         <Route path="/attendance" element={<div className="p-4">Attendance Page</div>} />
