@@ -80,7 +80,7 @@ export default function Payroll() {
                 bonuses: '0',
                 deductions: '0',
             });
-            fetchAllPayrolls();
+            fetchPayrolls();
         } catch (err) {
             console.error('Failed to generate payroll:', err);
             alert(err.response?.data?.message || 'Error processing payroll submission');
@@ -90,7 +90,7 @@ export default function Payroll() {
     const handleProcessPayment = async (id) => {
         try {
             await axios.put(`${API_BASE_URL}/${id}/pay`, {}, getAuthHeaders());
-            fetchAllPayrolls();
+            fetchPayrolls();
         } catch (err) {
             console.error('Failed to process payment status:', err);
         }
@@ -137,19 +137,19 @@ export default function Payroll() {
 
     const handleResetFilter = () => {
         setFilterEmpId('');
-        fetchAllPayrolls();
+        fetchPayrolls();
     };
 
     return (
         <div style={{ padding: '24px', maxWidth: '1100px', margin: '0 auto', fontFamily: 'sans-serif' }}>
             <h2>Payroll & Payslip Hub</h2>
-
+            {!isEmployee && (
             <PayrollForm
                 formData={formData}
                 onChange={handleInputChange}
                 onSubmit={handleFormSubmit}
             />
-
+            )}
             <PayrollTable
                 payrolls={payrolls}
                 loading={loading}
@@ -159,6 +159,7 @@ export default function Payroll() {
                 onResetFilter={handleResetFilter}
                 onProcessPayment={handleProcessPayment}
                 onDownloadPdf={handleDownloadPdf}
+                isEmployee={isEmployee}
             />
         </div>
     );
