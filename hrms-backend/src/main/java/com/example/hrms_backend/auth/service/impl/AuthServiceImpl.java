@@ -7,6 +7,8 @@ import com.example.hrms_backend.auth.model.User;
 import com.example.hrms_backend.auth.repository.UserRepository;
 import com.example.hrms_backend.auth.service.AuthService;
 import com.example.hrms_backend.common.security.JwtTokenProvider;
+import com.example.hrms_backend.employee.model.Employee;
+import com.example.hrms_backend.employee.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,6 +25,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
+    private final EmployeeRepository employeeRepository;
 
     @Override
     public JwtResponse login(LoginRequest request) {
@@ -40,7 +43,11 @@ public class AuthServiceImpl implements AuthService {
                 .orElseGet(() -> userRepository.findByEmail(request.getUsernameOrEmail())
                         .orElseThrow(() -> new RuntimeException("User not found")));
 
-        return new JwtResponse(token, user.getId(), user.getUsername(), user.getEmail(), user.getRole().name());
+
+        Long employeeId = employeeRepository.findByUserId(user.getId())
+                .map(Employee::getId)
+                .orElse(null);
+        return new JwtResponse(token, user.getId(), user.getUsername(), user.getEmail(), user.getRole().name(),employeeId);
     }
 
     @Override
@@ -58,6 +65,7 @@ public class AuthServiceImpl implements AuthService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
                 .build();
+
 
         userRepository.save(user);
         return "User registered successfully!";
