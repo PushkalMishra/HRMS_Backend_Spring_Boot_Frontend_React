@@ -4,6 +4,10 @@ import Layout from './components/Layout';
 import Login from './pages/Login';
 import Dashboard from './pages/dashboard/Dashboard';
 import Employees from './pages/employees/Employees';
+import Departments from './pages/departments/Departments';
+import Payroll from './pages/payroll/Payroll';
+import Attendance from './pages/attendance/Attendance';
+import Leaves from './pages/leaves/Leaves';
 const ProtectedRoute = ({ children }) => {
     const { isAuthenticated } = useAuth();
     return isAuthenticated ? children : <Navigate to="/login" replace />;
@@ -29,15 +33,15 @@ export default function App() {
                         {/* Restricted to Admin and Manager only */}
                         <Route path="/employees"
                             element={
-                                <ProtectedRoute allowedRoles={['ROLE_ADMIN', 'ROLE_MANAGER']}>
+                                <ProtectedRoute allowedRoles={['ROLE_ADMIN', 'ROLE_HR_MANAGER']}>
                                     <Employees />
                                 </ProtectedRoute>
                             }
                         />
-                        <Route path="/payroll" element={<div className="p-4">Payroll Page</div>} />
-                        <Route path="/departments" element={<div className="p-4">Departments Page</div>} />
-                        <Route path="/attendance" element={<div className="p-4">Attendance Page</div>} />
-                        <Route path="/leaves" element={<div className="p-4">Leaves Page</div>} />
+                        <Route path="/payroll" element={<Payroll />} />
+                        <Route path="/departments" element={<Departments/>}/>
+                        <Route path="/attendance" element={<Attendance />} />
+                        <Route path="/leaves" element={<Leaves />} />
                         <Route path="/profile" element={<div className="p-4">Profile Page</div>} />
                         <Route path="/settings" element={<div className="p-4">Settings Page</div>} />
                     </Route>

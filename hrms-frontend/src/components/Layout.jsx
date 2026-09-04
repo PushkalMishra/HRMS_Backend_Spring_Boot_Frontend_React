@@ -32,7 +32,7 @@ export default function Layout() {
 
     const navItems = [
         { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-        { name: 'Employees', path: '/employees', icon: Users, roles: ['ROLE_ADMIN', 'ROLE_MANAGER']},
+        { name: 'Employees', path: '/employees', icon: Users, roles: ['ROLE_ADMIN', 'ROLE_HR_MANAGER']},
         { name: 'Payroll', path: '/payroll', icon: FileText },
         { name: 'Departments', path: '/departments', icon: Building2 },
         { name: 'Attendance', path: '/attendance', icon: Clock },
